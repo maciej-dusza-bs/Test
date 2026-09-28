@@ -1,0 +1,7 @@
+min_file_size_bytes: 10
+max_file_size_bytes: 52428800  # 50 MiB
+header_peek_bytes: 4096
+header_scan_bytes: 65536
+expected_schema: IFC2X3
+# warn = status WARN i pipeline idzie dalej; fail = FAIL F2 (bramka)
+unknown_schema_policy: warn
