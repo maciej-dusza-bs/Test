@@ -57,6 +57,25 @@ def test_pipeline_runs_stubs_after_pass(tmp_path: Path) -> None:
     assert all(r.status == CheckStatus.STUB for r in store.results[1:])
 
 
+def test_run_one_executes_single_check(tmp_path: Path) -> None:
+    pytest.importorskip("ifcopenshell")
+    path = tmp_path / "model.ifc"
+    path.write_text(MINIMAL_IFC, encoding="utf-8")
+    ctx = CheckContext(
+        file_name=path.name,
+        file_path=path,
+        file_size=path.stat().st_size,
+        selected_check_ids=["F2", "F3"],
+        settings=AppSettings(),
+    )
+    pipeline = CheckPipeline()
+    first = pipeline.run_one(ctx, "F2")
+    second = pipeline.run_one(ctx, "F3")
+    assert first.check_id == "F2"
+    assert first.status == CheckStatus.PASS
+    assert second.status == CheckStatus.STUB
+
+
 def test_unselected_optional_checks_are_skipped(tmp_path: Path) -> None:
     pytest.importorskip("ifcopenshell")
     path = tmp_path / "model.ifc"

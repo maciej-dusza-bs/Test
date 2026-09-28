@@ -14,15 +14,14 @@ class CheckPipeline:
     def __init__(self, gate_check_id: str = GATE_CHECK_ID) -> None:
         self.gate_check_id = gate_check_id
 
+    def run_one(self, ctx: CheckContext, check_id: str) -> CheckResult:
+        return self._execute(registry.get(check_id), ctx)
+
     def run(self, ctx: CheckContext) -> ResultStore:
         store = ResultStore()
-        gate = registry.get(self.gate_check_id)
-        store.add(self._execute(gate, ctx))
-
-        gate_result = store.get(self.gate_check_id)
-        if gate_result is None or gate_result.status == CheckStatus.FAIL:
-            return store
-        if gate_result.status == CheckStatus.ERROR:
+        gate_result = self.run_one(ctx, self.gate_check_id)
+        store.add(gate_result)
+        if gate_result.status in {CheckStatus.FAIL, CheckStatus.ERROR}:
             return store
 
         for check in registry.items():
@@ -30,7 +29,7 @@ class CheckPipeline:
                 continue
             if check.id not in ctx.selected_check_ids:
                 continue
-            store.add(self._execute(check, ctx))
+            store.add(self.run_one(ctx, check.id))
         return store
 
     def _execute(self, check, ctx: CheckContext) -> CheckResult:

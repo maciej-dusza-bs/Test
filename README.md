@@ -22,12 +22,11 @@ Aplikacja otworzy się w przeglądarce (zazwyczaj `http://localhost:8501`).
 
 ## Przebieg pracy
 
-1. W panelu bocznym wybierz sprawdzenia (F2 jest zawsze włączone — to bramka wejściowa).
-2. Wgraj plik `*.ifc`.
-3. Opcjonalnie wgraj XLSX dla F4/F5 (w tej iteracji pliki są tylko parsowane).
-4. Uruchom kontrolę.
-5. Jeśli F2 zakończy się błędem, popraw plik i wgraj ponownie.
-6. Pobierz **Raport Kontroli** w formacie XLSX (arkusz Podsumowanie + arkusz na każde sprawdzenie).
+1. W panelu bocznym wybierz etapy (F2 jest zawsze włączone — bramka wejściowa).
+2. Każdy etap ma **osobną zakładkę**. Kolejna odblokowuje się dopiero po zaliczeniu poprzedniej (PASS / WARN / STUB).
+3. Pliki wgrywaj **w zakładce danego etapu**: IFC w F2, XLSX w F4 i F5.
+4. Przy błędzie F2 (lub innego etapu) popraw dane i uruchom ten etap ponownie — dalsze zakładki zostają zablokowane.
+5. Po ostatnim etapie otwórz zakładkę **Raport** i pobierz XLSX.
 
 ### Walidacja F2
 

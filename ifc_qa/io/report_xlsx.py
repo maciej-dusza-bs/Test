@@ -39,7 +39,7 @@ def build_report_bytes(store: ResultStore, ctx: CheckContext) -> bytes:
         summary[f"B{index}"] = value
 
     start = 10
-    headers = ["check_id", "nazwa", "status", "liczba_findings", "czas_ms", "podsumowanie"]
+    headers = ["check_id", "nazwa", "status", "liczba_uwag", "czas_ms", "podsumowanie"]
     for col, title in enumerate(headers, start=1):
         cell = summary.cell(row=start, column=col, value=title)
         cell.font = header_font
@@ -87,7 +87,7 @@ def _write_findings_sheet(sheet, result: CheckResult, header_font: Font) -> None
 
     if not result.findings:
         sheet.cell(row=6, column=1, value="—")
-        sheet.cell(row=6, column=3, value="Brak findings")
+        sheet.cell(row=6, column=3, value="Brak szczegółowych uwag")
     else:
         for index, finding in enumerate(result.findings, start=6):
             sheet.cell(row=index, column=1, value=finding.code)

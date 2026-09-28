@@ -13,6 +13,16 @@ class ResultStore:
     def add(self, result: CheckResult) -> None:
         self.results.append(result)
 
+    def upsert(self, result: CheckResult) -> None:
+        for index, existing in enumerate(self.results):
+            if existing.check_id == result.check_id:
+                self.results[index] = result
+                return
+        self.add(result)
+
+    def drop_from(self, check_ids: set[str]) -> None:
+        self.results = [item for item in self.results if item.check_id not in check_ids]
+
     def overall_status(self) -> CheckStatus:
         statuses = {r.status for r in self.results}
         if CheckStatus.FAIL in statuses or CheckStatus.ERROR in statuses:
